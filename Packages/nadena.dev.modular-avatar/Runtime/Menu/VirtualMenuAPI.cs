@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using VRC.SDK3.Avatars.ScriptableObjects;
 
 // Internal runtime API for the Virtual Menu system.
 //
@@ -10,6 +9,9 @@ using VRC.SDK3.Avatars.ScriptableObjects;
 // here public, but be aware that they may change without warning in the future.
 namespace nadena.dev.modular_avatar.core.menu
 {
+
+#if MA_VRC
+
     /// <summary>
     /// A MenuNode represents a single VRCExpressionsMenu, prior to overflow splitting. MenuNodes form a directed graph,
     /// which may contain cycles, and may include contributions from multiple MenuInstallers, or from the base avatar
@@ -59,6 +61,8 @@ namespace nadena.dev.modular_avatar.core.menu
         }
     }
 
+#endif
+
     /// <summary>
     /// Helper MenuSource which includes all children of a given GameObject containing MenuSourceComponents as menu
     /// items. Implements equality based on the GameObject in question.
@@ -101,12 +105,17 @@ namespace nadena.dev.modular_avatar.core.menu
     /// </summary>
     public interface NodeContext
     {
+        
+#if MA_VRC
+        
         /// <summary>
         /// Pushes the contents of this expressions menu asset onto the current menu node, handling loops and menu
         /// installer invocations.
         /// </summary>
         /// <param name="expMenu"></param>
         void PushMenuContents(VRCExpressionsMenu expMenu);
+
+#endif
 
         /// <summary>
         /// Pushes the contents of this menu source onto the current menu node.
@@ -119,6 +128,8 @@ namespace nadena.dev.modular_avatar.core.menu
         /// </summary>
         /// <param name="installer"></param>
         void PushNode(ModularAvatarMenuInstaller installer);
+
+#if MA_VRC
 
         /// <summary>
         /// Pushes a single expressions menu control onto the current menu node. Converts submenus into menu nodes
@@ -147,7 +158,11 @@ namespace nadena.dev.modular_avatar.core.menu
         /// <param name="menu"></param>
         /// <returns></returns>
         VirtualMenuNode NodeFor(MenuSource menu);
+
+#endif
+
     }
+
 
     /// <summary>
     /// An object which can contribute controls to a menu.
@@ -169,7 +184,6 @@ namespace nadena.dev.modular_avatar.core.menu
 
             RuntimeUtil.InvalidateMenu();
         }
-
         public abstract void Visit(NodeContext context);
     }
 }

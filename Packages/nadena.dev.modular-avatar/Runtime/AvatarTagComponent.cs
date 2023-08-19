@@ -24,10 +24,22 @@
 
 using System;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDKBase;
+#endif
 
 namespace nadena.dev.modular_avatar.core
 {
+    
+#if !MA_VRC
+
+    interface IEditorOnly
+    {
+    }
+
+#endif
+
     /**
      * This abstract base class is injected into the VRCSDK avatar component allowlist to avoid
      */

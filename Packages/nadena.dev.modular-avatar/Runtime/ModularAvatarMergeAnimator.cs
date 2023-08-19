@@ -23,7 +23,10 @@
  */
 
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
+#endif
 
 namespace nadena.dev.modular_avatar.core
 {
@@ -37,7 +40,13 @@ namespace nadena.dev.modular_avatar.core
     public class ModularAvatarMergeAnimator : AvatarTagComponent
     {
         public RuntimeAnimatorController animator;
+
+#if MA_VRC
         public VRCAvatarDescriptor.AnimLayerType layerType = VRCAvatarDescriptor.AnimLayerType.FX;
+#else
+        public int layerType;
+#endif
+
         public bool deleteAttachedAnimator;
         public MergeAnimatorPathMode pathMode = MergeAnimatorPathMode.Relative;
         public bool matchAvatarWriteDefaults;

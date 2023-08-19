@@ -14,6 +14,12 @@
     ],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.base",
+            "expression": "",
+            "define": "MA_VRC"
+        }
+    ],
     "noEngineReferences": false
 }

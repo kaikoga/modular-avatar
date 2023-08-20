@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#if MA_VRC
+using VRC.SDK3.Avatars.ScriptableObjects;
+#endif
+
 // Internal runtime API for the Virtual Menu system.
 //
 // IMPORTANT: This API is currently considered unstable. Due to C# protection rules, we are required to make classes

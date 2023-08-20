@@ -25,8 +25,9 @@ namespace nadena.dev.modular_avatar.core
         }
 
         [CanBeNull]
-        public static AvatarRoot AsAvatarRoot(GameObject target)
+        public static AvatarRoot AsAvatarRoot([CanBeNull] GameObject target)
         {
+            if (!target) return null;
             var av = target.GetComponent<VRCAvatarDescriptor>();
             return av ? new AvatarRoot(av) : null;
         }
@@ -55,8 +56,9 @@ namespace nadena.dev.modular_avatar.core
         }
 
         [CanBeNull]
-        public static AvatarRoot AsAvatarRoot(GameObject target)
+        public static AvatarRoot AsAvatarRoot([CanBeNull] GameObject target)
         {
+            if (!target) return null;
             var an = target.GetComponent<Animator>();
             if (!an) return null;
             var parent = target.transform.parent;
@@ -81,13 +83,13 @@ namespace nadena.dev.modular_avatar.core
         public T GetComponent<T>() where T : Component => component.GetComponent<T>();
         public T[] GetComponentsInChildren<T>(bool includeInactive) where T : Component => component.GetComponentsInChildren<T>(includeInactive);
 
-        public static bool IsAvatarRoot(Component target) => AsAvatarRoot(target) != null;
+        public static bool IsAvatarRoot([CanBeNull] Component target) => AsAvatarRoot(target) != null;
 
-        public static bool IsAvatarRoot(GameObject gameObject) => AsAvatarRoot(gameObject.transform) != null;
+        public static bool IsAvatarRoot([CanBeNull] GameObject gameObject) => AsAvatarRoot(gameObject) != null;
 
-        public static AvatarRoot AsAvatarRoot(Component target)
+        public static AvatarRoot AsAvatarRoot([CanBeNull] Component target)
         {
-            return AsAvatarRoot(target.gameObject);
+            return target != null ? AsAvatarRoot(target.gameObject) : null;
         }
 
 

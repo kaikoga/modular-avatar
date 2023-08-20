@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MA_VRC
+
+using System;
 using System.Linq;
 using System.Runtime.Serialization;
 using nadena.dev.modular_avatar.core.menu;
@@ -489,3 +491,5 @@ namespace nadena.dev.modular_avatar.core.editor
         }
     }
 }
+
+#endif

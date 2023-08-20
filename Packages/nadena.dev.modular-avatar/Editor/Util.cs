@@ -30,6 +30,10 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
+#if MA_VRC
+using VRC.SDKBase.Editor.BuildPipeline;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor

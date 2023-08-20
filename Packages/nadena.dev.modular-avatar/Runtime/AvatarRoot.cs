@@ -17,6 +17,7 @@ namespace nadena.dev.modular_avatar.core
         public GameObject gameObject => vrcAvatarDescriptor.gameObject; 
         public Component component => vrcAvatarDescriptor; 
         public Transform transform => vrcAvatarDescriptor.transform; 
+        public Animator animator => vrcAvatarDescriptor.GetComponent<Animator>();
 
         AvatarRoot(VRCAvatarDescriptor vrcAvatarDescriptor)
         {
@@ -77,6 +78,7 @@ namespace nadena.dev.modular_avatar.core
         }
 #endif
 
+        public T GetComponent<T>() where T : Component => component.GetComponent<T>(); 
         public static bool IsAvatarRoot(Component target) => AsAvatarRoot(target) != null;
 
         public static bool IsAvatarRoot(GameObject gameObject) => AsAvatarRoot(gameObject.transform) != null;

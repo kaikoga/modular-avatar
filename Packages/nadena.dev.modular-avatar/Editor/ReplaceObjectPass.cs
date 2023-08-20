@@ -42,7 +42,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             foreach (var component in replacementComponents)
             {
-                var targetObject = component.targetObject?.Get(_buildContext.AvatarDescriptor);
+                var targetObject = component.targetObject?.Get(_buildContext.AvatarDescriptor.component);
 
                 if (targetObject == null)
                 {

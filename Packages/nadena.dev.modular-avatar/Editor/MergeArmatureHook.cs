@@ -29,9 +29,13 @@ using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
+
+#if MA_VRC
 using VRC.Dynamics;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.PhysBone.Components;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -51,6 +55,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             TopoProcessMergeArmatures(mergeArmatures);
 
+#if MA_VRC
             foreach (var c in avatarGameObject.transform.GetComponentsInChildren<VRCPhysBone>(true))
             {
                 if (c.rootTransform == null) c.rootTransform = c.transform;
@@ -68,6 +73,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 if (c.rootTransform == null) c.rootTransform = c.transform;
                 RetainBoneReferences(c);
             }
+#endif
 
             foreach (var c in avatarGameObject.transform.GetComponentsInChildren<IConstraint>(true))
             {
@@ -156,7 +162,9 @@ namespace nadena.dev.modular_avatar.core.editor
                 mergedObjects.Clear();
                 thisPassAdded.Clear();
                 MergeArmature(config, target);
+#if MA_VRC
                 PruneDuplicatePhysBones();
+#endif
                 UnityEngine.Object.DestroyImmediate(config);
             });
         }
@@ -298,7 +306,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             List<IntermediateObj> rootPath = new List<IntermediateObj>();
 
-            while (root != null && root.GetComponent<VRCAvatarDescriptor>() == null)
+            while (root != null && !AvatarRoot.IsAvatarRoot(root))
             {
                 rootPath.Insert(0, new IntermediateObj()
                 {
@@ -456,6 +464,7 @@ namespace nadena.dev.modular_avatar.core.editor
             return merged;
         }
 
+#if MA_VRC
         /**
          * Sometimes outfit authors copy the entire armature, including PhysBones components. If we merge these and
          * end up with multiple PB components referencing the same target, PB refuses to animate the bone. So detect
@@ -495,5 +504,6 @@ namespace nadena.dev.modular_avatar.core.editor
                 }
             }
         }
+#endif
     }
 }

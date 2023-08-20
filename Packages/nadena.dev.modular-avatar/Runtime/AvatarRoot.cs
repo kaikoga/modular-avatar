@@ -36,7 +36,7 @@ namespace nadena.dev.modular_avatar.core
             while (target != null)
             {
                 var av = target.GetComponent<VRCAvatarDescriptor>();
-                if (av != null) return av;
+                if (av != null) return new AvatarRoot(av);
                 target = target.parent;
             }
 

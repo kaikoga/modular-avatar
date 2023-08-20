@@ -1,7 +1,7 @@
-﻿using nadena.dev.modular_avatar.core.editor;
+﻿using nadena.dev.modular_avatar.core;
+using nadena.dev.modular_avatar.core.editor;
 using NUnit.Framework;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace modular_avatar_tests
 {
@@ -13,7 +13,7 @@ namespace modular_avatar_tests
         public void TestProbeAnchor()
         {
             var prefab = CreatePrefab(PREFAB_NAME);
-            var context = new BuildContext(prefab.GetComponent<VRCAvatarDescriptor>());
+            var context = new BuildContext(AvatarRoot.AsAvatarRoot(prefab));
             new MeshSettingsPass(context).OnPreprocessAvatar();
 
             var root = prefab.transform.Find("RendererRoot");
@@ -33,7 +33,7 @@ namespace modular_avatar_tests
         public void TestProbeAnchorOverrides()
         {
             var prefab = CreatePrefab(PREFAB_NAME);
-            var context = new BuildContext(prefab.GetComponent<VRCAvatarDescriptor>());
+            var context = new BuildContext(AvatarRoot.AsAvatarRoot(prefab));
             new MeshSettingsPass(context).OnPreprocessAvatar();
 
             var noninherit = prefab.transform.Find("ProbeTargetRenderers/NonInherited").GetComponent<MeshRenderer>();
@@ -47,7 +47,7 @@ namespace modular_avatar_tests
         public void TestSetBounds()
         {
             var prefab = CreatePrefab(PREFAB_NAME);
-            var context = new BuildContext(prefab.GetComponent<VRCAvatarDescriptor>());
+            var context = new BuildContext(AvatarRoot.AsAvatarRoot(prefab));
             new MeshSettingsPass(context).OnPreprocessAvatar();
 
             var target = prefab.transform.Find("ProbeTarget");

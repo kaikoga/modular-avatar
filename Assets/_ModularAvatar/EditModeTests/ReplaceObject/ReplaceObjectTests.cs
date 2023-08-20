@@ -4,7 +4,6 @@ using nadena.dev.modular_avatar.core.editor;
 using nadena.dev.modular_avatar.editor.ErrorReporting;
 using NUnit.Framework;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace modular_avatar_tests.ReplaceObject
 {
@@ -12,7 +11,7 @@ namespace modular_avatar_tests.ReplaceObject
     {
         void Process(GameObject root)
         {
-            var avDesc = root.GetComponent<VRCAvatarDescriptor>();
+            var avDesc = AvatarRoot.AsAvatarRoot(root);
             new ReplaceObjectPass(new BuildContext(avDesc)).Process();
         }
 
@@ -100,7 +99,7 @@ namespace modular_avatar_tests.ReplaceObject
             BuildReport.Clear();
             Assert.Throws<Exception>(() =>
             {
-                using (BuildReport.CurrentReport.ReportingOnAvatar(root.GetComponent<VRCAvatarDescriptor>()))
+                using (BuildReport.CurrentReport.ReportingOnAvatar(AvatarRoot.AsAvatarRoot(root)))
                 {
                     Process(root);
                 }
@@ -120,7 +119,7 @@ namespace modular_avatar_tests.ReplaceObject
             BuildReport.Clear();
             Assert.Throws<Exception>(() =>
             {
-                using (BuildReport.CurrentReport.ReportingOnAvatar(root.GetComponent<VRCAvatarDescriptor>()))
+                using (BuildReport.CurrentReport.ReportingOnAvatar(AvatarRoot.AsAvatarRoot(root)))
                 {
                     Process(root);
                 }

@@ -1,8 +1,8 @@
-﻿using modular_avatar_tests;
+using modular_avatar_tests;
+using nadena.dev.modular_avatar.core;
 using nadena.dev.modular_avatar.core.editor;
 using NUnit.Framework;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 public class GameObjectGC : TestBase
 {
@@ -10,7 +10,7 @@ public class GameObjectGC : TestBase
     public void FakeHumanoidHandling()
     {
         var fake_humanoid = CreatePrefab("FakeHumanoid.prefab");
-        var avdesc = fake_humanoid.GetComponent<VRCAvatarDescriptor>();
+        var avdesc = AvatarRoot.AsAvatarRoot(fake_humanoid);
 
         new GCGameObjectsPass(new BuildContext(avdesc), fake_humanoid).OnPreprocessAvatar();
         AvatarProcessor.ProcessAvatar(fake_humanoid);
@@ -25,7 +25,7 @@ public class GameObjectGC : TestBase
     public void RetainEndBones()
     {
         var fake_humanoid = CreatePrefab("FakeHumanoid.prefab");
-        var avdesc = fake_humanoid.GetComponent<VRCAvatarDescriptor>();
+        var avdesc = AvatarRoot.AsAvatarRoot(fake_humanoid);
 
         var bone1 = CreateChild(fake_humanoid, "bone1");
         var bone2 = CreateChild(bone1, "bone2.end");

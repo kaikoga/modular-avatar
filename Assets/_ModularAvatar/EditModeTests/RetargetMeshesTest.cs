@@ -1,7 +1,7 @@
-﻿using nadena.dev.modular_avatar.core.editor;
+﻿using nadena.dev.modular_avatar.core;
+using nadena.dev.modular_avatar.core.editor;
 using NUnit.Framework;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace modular_avatar_tests
 {
@@ -21,7 +21,7 @@ namespace modular_avatar_tests
             Debug.Assert(skinnedMeshRenderer.bones.Length == 0);
 
             BoneDatabase.AddMergedBone(b.transform);
-            var context = new BuildContext(root.GetComponent<VRCAvatarDescriptor>());
+            var context = new BuildContext(AvatarRoot.AsAvatarRoot(root));
             new RetargetMeshes().OnPreprocessAvatar(root, context);
 
             Assert.AreEqual(a.transform, skinnedMeshRenderer.rootBone);
@@ -42,7 +42,7 @@ namespace modular_avatar_tests
             Debug.Assert(skinnedMeshRenderer.bones.Length == 0);
 
             BoneDatabase.AddMergedBone(b.transform);
-            var context = new BuildContext(root.GetComponent<VRCAvatarDescriptor>());
+            var context = new BuildContext(AvatarRoot.AsAvatarRoot(root));
             new RetargetMeshes().OnPreprocessAvatar(root, context);
 
             Assert.AreEqual(a.transform, skinnedMeshRenderer.rootBone);

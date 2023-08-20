@@ -1,4 +1,6 @@
-﻿using nadena.dev.modular_avatar.core.editor;
+﻿#if MA_VRC
+
+using nadena.dev.modular_avatar.core.editor;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -25,3 +27,5 @@ namespace modular_avatar_tests.TransformMappingThroughSwitchedObject
         }
     }
 }
+
+#endif

@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MA_VRC
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using nadena.dev.modular_avatar.core;
@@ -768,3 +770,5 @@ namespace modular_avatar_tests.VirtualMenuTests
         }
     }
 }
+
+#endif

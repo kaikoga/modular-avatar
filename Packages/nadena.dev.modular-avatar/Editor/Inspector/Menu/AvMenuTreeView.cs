@@ -18,11 +18,11 @@ namespace nadena.dev.modular_avatar.core.editor
 {
     class AvMenuTreeViewWindow : EditorWindow
     {
-        private VRCAvatarDescriptor _avatarDescriptor;
+        private AvatarRoot _avatarDescriptor;
         private AvMenuTreeView _treeView;
         private long _cacheIndex = -1;
 
-        public VRCAvatarDescriptor Avatar
+        public AvatarRoot Avatar
         {
             get => _treeView.Avatar;
             set => _treeView.Avatar = value;
@@ -71,7 +71,7 @@ namespace nadena.dev.modular_avatar.core.editor
             _treeView.OnGUI(new Rect(0, 0, position.width, position.height));
         }
 
-        internal static void Show(VRCAvatarDescriptor Avatar, ModularAvatarMenuInstaller Installer,
+        internal static void Show(AvatarRoot Avatar, ModularAvatarMenuInstaller Installer,
             Action<object> OnSelect)
         {
             var window = GetWindow<AvMenuTreeViewWindow>();
@@ -87,9 +87,9 @@ namespace nadena.dev.modular_avatar.core.editor
 
     class AvMenuTreeView : TreeView
     {
-        private VRCAvatarDescriptor _avatar;
+        private AvatarRoot _avatar;
 
-        public VRCAvatarDescriptor Avatar
+        public AvatarRoot Avatar
         {
             get => _avatar;
             set

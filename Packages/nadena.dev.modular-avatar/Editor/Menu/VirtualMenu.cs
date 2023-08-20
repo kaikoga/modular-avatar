@@ -268,11 +268,11 @@ namespace nadena.dev.modular_avatar.core.editor.menu
         }
 
         internal static VirtualMenu ForAvatar(
-            VRCAvatarDescriptor avatar,
+            AvatarRoot avatar,
             BuildContext context = null
         )
         {
-            var menu = new VirtualMenu(avatar.expressionsMenu, context);
+            var menu = new VirtualMenu(avatar.vrcAvatarDescriptor.expressionsMenu, context);
             foreach (var installer in avatar.GetComponentsInChildren<ModularAvatarMenuInstaller>(true))
             {
                 menu.RegisterMenuInstaller(installer);

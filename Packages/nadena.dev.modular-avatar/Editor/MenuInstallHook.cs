@@ -36,19 +36,19 @@ namespace nadena.dev.modular_avatar.core.editor
 
             _visitedInstallerStack = new Stack<ModularAvatarMenuInstaller>();
 
-            VRCAvatarDescriptor avatar = avatarRoot.GetComponent<VRCAvatarDescriptor>();
+            AvatarRoot avatar = AvatarRoot.AsAvatarRoot(avatarRoot);
 
-            if (avatar.expressionsMenu == null)
+            if (avatar.vrcAvatarDescriptor.expressionsMenu == null)
             {
                 var menu = ScriptableObject.CreateInstance<VRCExpressionsMenu>();
                 _context.SaveAsset(menu);
-                avatar.expressionsMenu = menu;
+                avatar.vrcAvatarDescriptor.expressionsMenu = menu;
                 context.ClonedMenus[menu] = menu;
             }
 
-            _rootMenu = avatar.expressionsMenu;
+            _rootMenu = avatar.vrcAvatarDescriptor.expressionsMenu;
             var virtualMenu = VirtualMenu.ForAvatar(avatar, context);
-            avatar.expressionsMenu = virtualMenu.SerializeMenu(asset =>
+            avatar.vrcAvatarDescriptor.expressionsMenu = virtualMenu.SerializeMenu(asset =>
             {
                 context.SaveAsset(asset);
                 if (asset is VRCExpressionsMenu menu) SplitMenu(menu);

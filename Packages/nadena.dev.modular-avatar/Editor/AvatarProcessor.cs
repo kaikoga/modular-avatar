@@ -33,8 +33,12 @@ using System.Runtime.CompilerServices;
 using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase.Editor.BuildPipeline;
+#endif
+
 using BuildReport = nadena.dev.modular_avatar.editor.ErrorReporting.BuildReport;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
@@ -43,6 +47,11 @@ using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
+#if !MA_VRC
+    interface IVRCSDKPreprocessAvatarCallback { }
+    interface IVRCSDKPostprocessAvatarCallback { }
+#endif
+
     [InitializeOnLoad]
     public class AvatarProcessor : IVRCSDKPreprocessAvatarCallback, IVRCSDKPostprocessAvatarCallback
     {
@@ -83,14 +92,14 @@ namespace nadena.dev.modular_avatar.core.editor
         private static bool ValidateApplyToCurrentAvatar()
         {
             var avatar = Selection.activeGameObject;
-            return (avatar != null && avatar.GetComponent<VRCAvatarDescriptor>() != null);
+            return AvatarRoot.IsAvatarRoot(avatar);
         }
 
         [MenuItem("Tools/Modular Avatar/Manual bake avatar", false)]
         private static void ApplyToCurrentAvatar()
         {
             var avatar = Selection.activeGameObject;
-            if (avatar == null || avatar.GetComponent<VRCAvatarDescriptor>() == null) return;
+            if (!AvatarRoot.IsAvatarRoot(avatar)) return;
             var basePath = "Assets/ModularAvatarOutput/" + avatar.name;
             var savePath = basePath;
 

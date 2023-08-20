@@ -273,7 +273,7 @@ namespace nadena.dev.modular_avatar.editor.ErrorReporting
             }
         }
 
-        internal IDisposable ReportingOnAvatar(VRCAvatarDescriptor descriptor)
+        internal IDisposable ReportingOnAvatar(AvatarRoot descriptor)
         {
             if (descriptor != null)
             {

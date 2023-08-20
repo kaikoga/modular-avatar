@@ -4,19 +4,25 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
     internal class BuildContext
     {
-        internal readonly VRCAvatarDescriptor AvatarDescriptor;
+        internal readonly AvatarRoot AvatarDescriptor;
         internal readonly AnimationDatabase AnimationDatabase = new AnimationDatabase();
         internal readonly UnityEngine.Object AssetContainer;
 
         private bool SaveImmediate = false;
+
+#if MA_VRC
 
         internal readonly Dictionary<VRCExpressionsMenu, VRCExpressionsMenu> ClonedMenus
             = new Dictionary<VRCExpressionsMenu, VRCExpressionsMenu>();
@@ -29,7 +35,9 @@ namespace nadena.dev.modular_avatar.core.editor
         internal readonly Dictionary<ModularAvatarMenuInstaller, Action<VRCExpressionsMenu.Control>> PostProcessControls
             = new Dictionary<ModularAvatarMenuInstaller, Action<VRCExpressionsMenu.Control>>();
 
-        public BuildContext(VRCAvatarDescriptor avatarDescriptor)
+#endif
+
+        public BuildContext(AvatarRoot avatarDescriptor)
         {
             AvatarDescriptor = avatarDescriptor;
 
@@ -92,6 +100,8 @@ namespace nadena.dev.modular_avatar.core.editor
             return merger.Finish();
         }
 
+#if MA_VRC
+
         public VRCExpressionsMenu CloneMenu(VRCExpressionsMenu menu)
         {
             if (menu == null) return null;
@@ -124,6 +134,8 @@ namespace nadena.dev.modular_avatar.core.editor
 
             return newMenu;
         }
+
+#endif
 
         public void CommitReferencedAssets()
         {

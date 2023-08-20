@@ -5,7 +5,11 @@ using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -64,6 +68,14 @@ namespace nadena.dev.modular_avatar.core.editor
             }
         }
 
+        internal void Bootstrap(AvatarRoot avatarRoot)
+        {
+#if MA_VRC
+            Bootstrap(avatarRoot.vrcAvatarDescriptor);
+#endif
+        }
+
+#if MA_VRC
         internal void Bootstrap(VRCAvatarDescriptor avatarDescriptor)
         {
             foreach (var layer in avatarDescriptor.baseAnimationLayers)
@@ -90,6 +102,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Registers a motion and all its reachable submotions with the animation database. The processClip callback,

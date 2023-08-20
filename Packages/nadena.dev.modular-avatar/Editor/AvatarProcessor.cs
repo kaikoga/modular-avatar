@@ -166,7 +166,7 @@ namespace nadena.dev.modular_avatar.core.editor
         {
             if (nowProcessing) return;
 
-            var vrcAvatarDescriptor = avatarGameObject.GetComponent<VRCAvatarDescriptor>();
+            var vrcAvatarDescriptor = AvatarRoot.AsAvatarRoot(avatarGameObject);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -186,7 +186,12 @@ namespace nadena.dev.modular_avatar.core.editor
 
                         BoneDatabase.ResetBones();
                         PathMappings.Init(vrcAvatarDescriptor.gameObject);
+#if MA_VRC
                         ClonedMenuMappings.Clear();
+#endif
+
+                        // TODO: Perhaps we want to purge VRCSDK components by type name?
+#if MA_VRC
 
                         // Sometimes people like to nest one avatar in another, when transplanting clothing. To avoid issues
                         // with inconsistently determining the avatar root, we'll go ahead and remove the extra sub-avatars
@@ -206,6 +211,7 @@ namespace nadena.dev.modular_avatar.core.editor
                                 Object.DestroyImmediate(component);
                             }
                         }
+#endif
 
                         var context = new BuildContext(vrcAvatarDescriptor);
 
@@ -281,8 +287,9 @@ namespace nadena.dev.modular_avatar.core.editor
                             UnityEngine.Object.DestroyImmediate(activator);
                         }
 
+#if MA_VRC
                         ClonedMenuMappings.Clear();
-
+#endif
                         AssetDatabase.SaveAssets();
 
                         Resources.UnloadUnusedAssets();
@@ -338,6 +345,7 @@ namespace nadena.dev.modular_avatar.core.editor
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static void FixupAnimatorDebugData(GameObject avatarGameObject)
         {
+#if MA_VRC
             Object tempControlPanel = null;
             try
             {
@@ -396,6 +404,7 @@ namespace nadena.dev.modular_avatar.core.editor
             {
                 if (tempControlPanel != null) Object.DestroyImmediate(tempControlPanel);
             }
+#endif
         }
     }
 }

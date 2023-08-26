@@ -96,9 +96,10 @@ namespace nadena.dev.modular_avatar.core
             return RelativePath(avatar.gameObject, child);
         }
 
+        [CanBeNull]
         public static Component FindAvatarInParents(Transform target)
         {
-            return AvatarRoot.FindAvatarInParents(target).component;
+            return AvatarRoot.FindAvatarInParents(target)?.component;
         }
 
         public static void MarkDirty(UnityEngine.Object obj)

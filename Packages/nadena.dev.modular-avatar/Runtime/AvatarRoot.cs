@@ -66,6 +66,7 @@ namespace nadena.dev.modular_avatar.core
             return new AvatarRoot(an);
         }
 
+        [CanBeNull]
         public static AvatarRoot FindAvatarInParents(Transform target)
         {
             Animator av = null; 

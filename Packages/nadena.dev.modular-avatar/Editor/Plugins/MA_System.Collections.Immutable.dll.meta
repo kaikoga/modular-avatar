@@ -9,7 +9,7 @@ PluginImporter:
   - '!VRC_SDK_VRCSDK3'
   isPreloaded: 0
   isOverridable: 1
-  isExplicitlyReferenced: 0
+  isExplicitlyReferenced: 1
   validateReferences: 1
   platformData:
   - first:

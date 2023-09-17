@@ -29,12 +29,18 @@ using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
+
+#if MA_VRC
 using VRC.SDKBase.Editor.BuildPipeline;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
+
+#if MA_VRC
+
     internal class CleanupTempAssets : IVRCSDKPostprocessAvatarCallback
     {
         public int callbackOrder => 99999;
@@ -44,6 +50,8 @@ namespace nadena.dev.modular_avatar.core.editor
             Util.DeleteTemporaryAssets();
         }
     }
+
+#endif
 
     [InitializeOnLoad]
     internal static class Util
@@ -240,12 +248,13 @@ namespace nadena.dev.modular_avatar.core.editor
 
         internal static IEnumerable<T> FindComponentInParents<T>(this Component t) where T : Component
         {
-            Transform ptr = t.transform.parent;
+            var ptr = t.transform.parent;
+            var avatarRootTransform = AvatarRoot.FindAvatarInParents(ptr).transform;
             while (ptr != null)
             {
                 var component = ptr.GetComponent<T>();
                 if (component != null) yield return component;
-                if (ptr.GetComponent<VRCAvatarDescriptor>() != null) break;
+                if (ptr == avatarRootTransform) break;
                 ptr = ptr.parent;
             }
         }

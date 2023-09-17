@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using VRC.SDK3.Avatars.Components;
 
 namespace nadena.dev.modular_avatar.core
 {
@@ -30,14 +29,11 @@ namespace nadena.dev.modular_avatar.core
             if (!RuntimeUtil.isPlaying || this == null) return;
 
             var scene = gameObject.scene;
-            foreach (var root in scene.GetRootGameObjects())
+            foreach (var avatar in AvatarRoot.GetAvatarRoots(scene))
             {
-                foreach (var avatar in root.GetComponentsInChildren<VRCAvatarDescriptor>())
+                if (avatar.transform.GetComponentInChildren<AvatarTagComponent>(true) != null)
                 {
-                    if (avatar.GetComponentInChildren<AvatarTagComponent>(true) != null)
-                    {
-                        avatar.gameObject.GetOrAddComponent<AvatarActivator>().hideFlags = HideFlags.HideInInspector;
-                    }
+                    avatar.gameObject.GetOrAddComponent<AvatarActivator>().hideFlags = HideFlags.HideInInspector;
                 }
             }
         }

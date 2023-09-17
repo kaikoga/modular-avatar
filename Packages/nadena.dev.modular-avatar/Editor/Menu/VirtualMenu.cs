@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MA_VRC
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -6,6 +8,7 @@ using JetBrains.Annotations;
 using nadena.dev.modular_avatar.core.menu;
 using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEngine;
+
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
@@ -265,11 +268,11 @@ namespace nadena.dev.modular_avatar.core.editor.menu
         }
 
         internal static VirtualMenu ForAvatar(
-            VRCAvatarDescriptor avatar,
+            AvatarRoot avatar,
             BuildContext context = null
         )
         {
-            var menu = new VirtualMenu(avatar.expressionsMenu, context);
+            var menu = new VirtualMenu(avatar.vrcAvatarDescriptor.expressionsMenu, context);
             foreach (var installer in avatar.GetComponentsInChildren<ModularAvatarMenuInstaller>(true))
             {
                 menu.RegisterMenuInstaller(installer);
@@ -478,3 +481,5 @@ namespace nadena.dev.modular_avatar.core.editor.menu
         }
     }
 }
+
+#endif

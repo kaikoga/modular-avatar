@@ -1,7 +1,6 @@
 ﻿using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
@@ -10,9 +9,9 @@ namespace nadena.dev.modular_avatar.core.editor
     /// </summary>
     internal class RemapAnimationPass
     {
-        private readonly VRCAvatarDescriptor _avatarDescriptor;
+        private readonly AvatarRoot _avatarDescriptor;
 
-        public RemapAnimationPass(VRCAvatarDescriptor avatarDescriptor)
+        public RemapAnimationPass(AvatarRoot avatarDescriptor)
         {
             _avatarDescriptor = avatarDescriptor;
         }

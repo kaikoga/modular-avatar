@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿#if MA_VRC
+
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using VRC.SDK3.Avatars.ScriptableObjects;
 
@@ -49,3 +51,5 @@ namespace nadena.dev.modular_avatar.core.editor
         }
     }
 }
+
+#endif

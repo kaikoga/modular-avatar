@@ -6,7 +6,10 @@ using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
+#endif
 
 namespace modular_avatar_tests
 {
@@ -70,6 +73,7 @@ namespace modular_avatar_tests
             return obj;
         }
 
+#if MA_VRC
 
         protected static AnimationClip findFxClip(GameObject prefab, string layerName)
         {
@@ -111,5 +115,8 @@ namespace modular_avatar_tests
             Assert.NotNull(layer);
             return layer;
         }
+
+#endif
+
     }
 }

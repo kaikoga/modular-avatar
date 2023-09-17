@@ -1,0 +1,119 @@
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+#if MA_VRC
+using VRC.SDK3.Avatars.Components;
+#endif
+
+namespace nadena.dev.modular_avatar.core
+{
+    public class AvatarRoot
+    {
+#if MA_VRC
+        public readonly VRCAvatarDescriptor vrcAvatarDescriptor;
+
+        public GameObject gameObject => vrcAvatarDescriptor.gameObject; 
+        public Component component => vrcAvatarDescriptor; 
+        public Transform transform => vrcAvatarDescriptor.transform; 
+        public Animator animator => vrcAvatarDescriptor.GetComponent<Animator>();
+
+        AvatarRoot(VRCAvatarDescriptor vrcAvatarDescriptor)
+        {
+            this.vrcAvatarDescriptor = vrcAvatarDescriptor;
+        }
+
+        [CanBeNull]
+        public static AvatarRoot AsAvatarRoot([CanBeNull] GameObject target)
+        {
+            if (!target) return null;
+            var av = target.GetComponent<VRCAvatarDescriptor>();
+            return av ? new AvatarRoot(av) : null;
+        }
+
+        public static AvatarRoot FindAvatarInParents(Transform target)
+        {
+            while (target != null)
+            {
+                var av = target.GetComponent<VRCAvatarDescriptor>();
+                if (av != null) return new AvatarRoot(av);
+                target = target.parent;
+            }
+
+            return null;
+        }
+#else
+        public readonly Animator animator;
+
+        public GameObject gameObject => animator.gameObject; 
+        public Component component => animator; 
+        public Transform transform => animator.transform; 
+
+        AvatarRoot(Animator animator)
+        {
+            this.animator = animator;
+        }
+
+        [CanBeNull]
+        public static AvatarRoot AsAvatarRoot([CanBeNull] GameObject target)
+        {
+            if (!target) return null;
+            var an = target.GetComponent<Animator>();
+            if (!an) return null;
+            var parent = target.transform.parent;
+            if (parent && parent.GetComponentInParent<Animator>()) return null;
+            return new AvatarRoot(an);
+        }
+
+        [CanBeNull]
+        public static AvatarRoot FindAvatarInParents(Transform target)
+        {
+            Animator av = null; 
+            while (target != null)
+            {
+                var an = target.GetComponent<Animator>();
+                if (an != null) av = an;
+                target = target.parent;
+            }
+            return av ? new AvatarRoot(av) : null;
+
+        }
+#endif
+
+        public T GetComponent<T>() where T : Component => component.GetComponent<T>();
+        public T[] GetComponentsInChildren<T>(bool includeInactive) where T : Component => component.GetComponentsInChildren<T>(includeInactive);
+
+        public static bool IsAvatarRoot([CanBeNull] Component target) => AsAvatarRoot(target) != null;
+
+        public static bool IsAvatarRoot([CanBeNull] GameObject gameObject) => AsAvatarRoot(gameObject) != null;
+
+        public static AvatarRoot AsAvatarRoot([CanBeNull] Component target)
+        {
+            return target != null ? AsAvatarRoot(target.gameObject) : null;
+        }
+
+
+        static IEnumerable<AvatarRoot> GetAvatarRoots<T>(Scene scene)
+            where T : Component
+        {
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var avatar in root.GetComponentsInChildren<T>())
+                {
+                    var a = AsAvatarRoot(avatar);
+                    if (a != null) yield return a;
+                }
+            }
+        }
+
+        public static IEnumerable<AvatarRoot> GetAvatarRoots(Scene scene)
+        {
+#if MA_VRC
+            return GetAvatarRoots<VRCAvatarDescriptor>(scene);
+#else
+            return GetAvatarRoots<Animator>(scene);
+#endif
+        }
+    }
+}

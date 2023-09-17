@@ -26,7 +26,6 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 #if UNITY_EDITOR
 using System.Reflection;
 #endif
@@ -97,16 +96,10 @@ namespace nadena.dev.modular_avatar.core
             return RelativePath(avatar.gameObject, child);
         }
 
-        public static VRCAvatarDescriptor FindAvatarInParents(Transform target)
+        [CanBeNull]
+        public static Component FindAvatarInParents(Transform target)
         {
-            while (target != null)
-            {
-                var av = target.GetComponent<VRCAvatarDescriptor>();
-                if (av != null) return av;
-                target = target.parent;
-            }
-
-            return null;
+            return AvatarRoot.FindAvatarInParents(target)?.component;
         }
 
         public static void MarkDirty(UnityEngine.Object obj)

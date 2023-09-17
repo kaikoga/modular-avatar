@@ -5,7 +5,6 @@ using System.Linq;
 using nadena.dev.modular_avatar.core;
 using Newtonsoft.Json;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
@@ -273,7 +272,7 @@ namespace nadena.dev.modular_avatar.editor.ErrorReporting
             }
         }
 
-        internal IDisposable ReportingOnAvatar(VRCAvatarDescriptor descriptor)
+        internal IDisposable ReportingOnAvatar(AvatarRoot descriptor)
         {
             if (descriptor != null)
             {

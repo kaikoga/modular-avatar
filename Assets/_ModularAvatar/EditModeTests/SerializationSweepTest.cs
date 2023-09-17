@@ -1,8 +1,8 @@
-﻿using nadena.dev.modular_avatar.core.editor;
+﻿using nadena.dev.modular_avatar.core;
+using nadena.dev.modular_avatar.core.editor;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace modular_avatar_tests.serialization
 {
@@ -39,7 +39,7 @@ namespace modular_avatar_tests.serialization
             testScriptable2.ref2 = testScriptable4;
             testScriptable3.ref2 = testScriptable4;
 
-            BuildContext bc = new BuildContext(root.GetComponent<VRCAvatarDescriptor>());
+            BuildContext bc = new BuildContext(AvatarRoot.AsAvatarRoot(root));
             bc.CommitReferencedAssets();
 
             var path = AssetDatabase.GetAssetPath(testScriptable1);

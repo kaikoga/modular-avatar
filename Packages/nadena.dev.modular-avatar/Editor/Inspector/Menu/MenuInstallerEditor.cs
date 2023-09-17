@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MA_VRC
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -39,7 +41,7 @@ namespace nadena.dev.modular_avatar.core.editor
             FindMenus();
             FindMenuInstallers();
 
-            VRCAvatarDescriptor commonAvatar = FindCommonAvatar();
+            AvatarRoot commonAvatar = FindCommonAvatar();
         }
 
         private long _cacheSeq = -1;
@@ -152,7 +154,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             var isEnabled = targets.Length != 1 || ((ModularAvatarMenuInstaller) target).enabled;
 
-            VRCAvatarDescriptor commonAvatar = FindCommonAvatar();
+            AvatarRoot commonAvatar = FindCommonAvatar();
 
             if (InstallTargets.Count == 0)
             {
@@ -170,7 +172,7 @@ namespace nadena.dev.modular_avatar.core.editor
                         }
                     }
                     else if (InstallTargets[0] is VRCExpressionsMenu menu
-                             && !IsMenuReachable(RuntimeUtil.FindAvatarInParents(((Component) target).transform), menu))
+                             && !IsMenuReachable(AvatarRoot.FindAvatarInParents(((Component) target).transform), menu))
                     {
                         EditorGUILayout.HelpBox(S("menuinstall.help.hint_bad_menu"), MessageType.Error);
                     }
@@ -179,7 +181,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 if (InstallTargets.Count == 1 && (InstallTargets[0] is VRCExpressionsMenu || InstallTargets[0] == null))
                 {
                     var displayValue = installTo.objectReferenceValue;
-                    if (displayValue == null) displayValue = commonAvatar.expressionsMenu;
+                    if (displayValue == null) displayValue = commonAvatar.vrcAvatarDescriptor.expressionsMenu;
 
                     EditorGUI.BeginChangeCheck();
                     var newValue = EditorGUILayout.ObjectField(G("menuinstall.installto"), displayValue,
@@ -251,7 +253,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
                         if (menu is VRCExpressionsMenu expMenu)
                         {
-                            if (expMenu == avatar.expressionsMenu) installTo.objectReferenceValue = null;
+                            if (expMenu == avatar.vrcAvatarDescriptor.expressionsMenu) installTo.objectReferenceValue = null;
                             else installTo.objectReferenceValue = expMenu;
                         }
                         else if (menu is RootMenu)
@@ -447,14 +449,14 @@ namespace nadena.dev.modular_avatar.core.editor
             }
         }
 
-        private VRCAvatarDescriptor FindCommonAvatar()
+        private AvatarRoot FindCommonAvatar()
         {
-            VRCAvatarDescriptor commonAvatar = null;
+            AvatarRoot commonAvatar = null;
 
             foreach (var target in targets)
             {
                 var component = (ModularAvatarMenuInstaller) target;
-                var avatar = RuntimeUtil.FindAvatarInParents(component.transform);
+                var avatar = AvatarRoot.FindAvatarInParents(component.transform);
                 if (avatar == null) return null;
 
                 if (commonAvatar == null)
@@ -480,9 +482,9 @@ namespace nadena.dev.modular_avatar.core.editor
 
             _avatarMenus = new HashSet<VRCExpressionsMenu>();
             var queue = new Queue<VRCExpressionsMenu>();
-            var avatar = RuntimeUtil.FindAvatarInParents(((Component) target).transform);
-            if (avatar == null || avatar.expressionsMenu == null) return;
-            queue.Enqueue(avatar.expressionsMenu);
+            var avatar = AvatarRoot.FindAvatarInParents(((Component) target).transform);
+            if (avatar == null || avatar.vrcAvatarDescriptor.expressionsMenu == null) return;
+            queue.Enqueue(avatar.vrcAvatarDescriptor.expressionsMenu);
 
             while (queue.Count > 0)
             {
@@ -544,7 +546,7 @@ namespace nadena.dev.modular_avatar.core.editor
             }
         }
 
-        private bool IsMenuReachable(VRCAvatarDescriptor avatar, VRCExpressionsMenu menu)
+        private bool IsMenuReachable(AvatarRoot avatar, VRCExpressionsMenu menu)
         {
             var virtualMenu = VirtualMenu.ForAvatar(avatar);
 
@@ -586,3 +588,5 @@ namespace nadena.dev.modular_avatar.core.editor
         }
     }
 }
+
+#endif

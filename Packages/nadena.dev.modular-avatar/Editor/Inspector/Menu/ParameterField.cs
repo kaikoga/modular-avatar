@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if MA_VRC
+
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -284,3 +286,5 @@ namespace nadena.dev.modular_avatar.core.editor
         }
     }
 }
+
+#endif

@@ -33,8 +33,12 @@ using System.Runtime.CompilerServices;
 using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
+
+#if MA_VRC
 using VRC.SDK3.Avatars.Components;
 using VRC.SDKBase.Editor.BuildPipeline;
+#endif
+
 using BuildReport = nadena.dev.modular_avatar.editor.ErrorReporting.BuildReport;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
@@ -43,6 +47,11 @@ using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
+#if !MA_VRC
+    interface IVRCSDKPreprocessAvatarCallback { }
+    interface IVRCSDKPostprocessAvatarCallback { }
+#endif
+
     [InitializeOnLoad]
     public class AvatarProcessor : IVRCSDKPreprocessAvatarCallback, IVRCSDKPostprocessAvatarCallback
     {
@@ -83,14 +92,14 @@ namespace nadena.dev.modular_avatar.core.editor
         private static bool ValidateApplyToCurrentAvatar()
         {
             var avatar = Selection.activeGameObject;
-            return (avatar != null && avatar.GetComponent<VRCAvatarDescriptor>() != null);
+            return AvatarRoot.IsAvatarRoot(avatar);
         }
 
         [MenuItem("Tools/Modular Avatar/Manual bake avatar", false)]
         private static void ApplyToCurrentAvatar()
         {
             var avatar = Selection.activeGameObject;
-            if (avatar == null || avatar.GetComponent<VRCAvatarDescriptor>() == null) return;
+            if (!AvatarRoot.IsAvatarRoot(avatar)) return;
             var basePath = "Assets/ModularAvatarOutput/" + avatar.name;
             var savePath = basePath;
 
@@ -157,7 +166,7 @@ namespace nadena.dev.modular_avatar.core.editor
         {
             if (nowProcessing) return;
 
-            var vrcAvatarDescriptor = avatarGameObject.GetComponent<VRCAvatarDescriptor>();
+            var vrcAvatarDescriptor = AvatarRoot.AsAvatarRoot(avatarGameObject);
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -177,7 +186,12 @@ namespace nadena.dev.modular_avatar.core.editor
 
                         BoneDatabase.ResetBones();
                         PathMappings.Init(vrcAvatarDescriptor.gameObject);
+#if MA_VRC
                         ClonedMenuMappings.Clear();
+#endif
+
+                        // TODO: Perhaps we want to purge VRCSDK components by type name?
+#if MA_VRC
 
                         // Sometimes people like to nest one avatar in another, when transplanting clothing. To avoid issues
                         // with inconsistently determining the avatar root, we'll go ahead and remove the extra sub-avatars
@@ -197,22 +211,29 @@ namespace nadena.dev.modular_avatar.core.editor
                                 Object.DestroyImmediate(component);
                             }
                         }
+#endif
 
                         var context = new BuildContext(vrcAvatarDescriptor);
 
                         new MeshSettingsPass(context).OnPreprocessAvatar();
+#if MA_VRC
                         new RenameParametersHook().OnPreprocessAvatar(avatarGameObject, context);
                         new MergeAnimatorProcessor().OnPreprocessAvatar(avatarGameObject, context);
+#endif
                         context.AnimationDatabase.Bootstrap(vrcAvatarDescriptor);
 
+#if MA_VRC
                         new MenuInstallHook().OnPreprocessAvatar(avatarGameObject, context);
+#endif
                         new MergeArmatureHook().OnPreprocessAvatar(context, avatarGameObject);
                         new BoneProxyProcessor().OnPreprocessAvatar(avatarGameObject);
                         new VisibleHeadAccessoryProcessor(vrcAvatarDescriptor).Process(context);
                         new ReplaceObjectPass(context).Process();
                         new RemapAnimationPass(vrcAvatarDescriptor).Process(context.AnimationDatabase);
+#if MA_VRC
                         new BlendshapeSyncAnimationProcessor().OnPreprocessAvatar(avatarGameObject, context);
                         PhysboneBlockerPass.Process(avatarGameObject);
+#endif
 
                         context.CommitReferencedAssets();
 
@@ -272,8 +293,9 @@ namespace nadena.dev.modular_avatar.core.editor
                             UnityEngine.Object.DestroyImmediate(activator);
                         }
 
+#if MA_VRC
                         ClonedMenuMappings.Clear();
-
+#endif
                         AssetDatabase.SaveAssets();
 
                         Resources.UnloadUnusedAssets();
@@ -329,6 +351,7 @@ namespace nadena.dev.modular_avatar.core.editor
         [SuppressMessage("ReSharper", "PossibleNullReferenceException")]
         private static void FixupAnimatorDebugData(GameObject avatarGameObject)
         {
+#if MA_VRC
             Object tempControlPanel = null;
             try
             {
@@ -387,6 +410,7 @@ namespace nadena.dev.modular_avatar.core.editor
             {
                 if (tempControlPanel != null) Object.DestroyImmediate(tempControlPanel);
             }
+#endif
         }
     }
 }

@@ -12,6 +12,10 @@
     "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
+        "MA_System.Buffers.dll",
+        "MA_System.Collections.Immutable.dll",
+        "MA_System.Memory.dll",
+        "MA_System.Runtime.CompilerServices.Unsafe.dll",
         "Newtonsoft.Json.dll",
         "System.Collections.Immutable.dll",
         "VRCSDKBase.dll",

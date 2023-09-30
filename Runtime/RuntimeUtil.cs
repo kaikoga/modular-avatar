@@ -87,7 +87,7 @@ namespace nadena.dev.modular_avatar.core
         public static string AvatarRootPath(GameObject child)
         {
             if (child == null) return null;
-            var avatar = FindAvatarInParents(child.transform);
+            var avatar = FindAvatarTransformInParents(child.transform);
             if (avatar == null) return null;
             return RelativePath(avatar.gameObject, child);
         }
@@ -95,6 +95,7 @@ namespace nadena.dev.modular_avatar.core
         public static bool IsAvatarRoot(Transform target) => ndmf.runtime.RuntimeUtil.IsAvatarRoot(target);
 
 #if MA_VRCSDK3_AVATARS
+        [Obsolete("Please use RuntimeUtil.FindAvatarTransformInParents()")]
         public static VRCAvatarDescriptor FindAvatarInParents(Transform target)
         {
             while (target != null)

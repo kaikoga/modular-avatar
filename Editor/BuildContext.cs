@@ -4,8 +4,12 @@ using nadena.dev.modular_avatar.animation;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -14,24 +18,27 @@ namespace nadena.dev.modular_avatar.core.editor
     {
         internal readonly nadena.dev.ndmf.BuildContext PluginBuildContext;
 
+#if MA_VRCSDK3_AVATARS
         internal VRCAvatarDescriptor AvatarDescriptor => PluginBuildContext.AvatarDescriptor;
 
+#endif
         internal AnimationDatabase AnimationDatabase =>
             PluginBuildContext.Extension<AnimationServicesContext>().AnimationDatabase;
 
         internal PathMappings PathMappings =>
             PluginBuildContext.Extension<AnimationServicesContext>().PathMappings;
-
         internal UnityEngine.Object AssetContainer => PluginBuildContext.AssetContainer;
 
         private bool SaveImmediate = false;
 
+#if MA_VRCSDK3_AVATARS
         internal readonly Dictionary<VRCExpressionsMenu, VRCExpressionsMenu> ClonedMenus
             = new Dictionary<VRCExpressionsMenu, VRCExpressionsMenu>();
-
+#endif
         public static implicit operator BuildContext(ndmf.BuildContext ctx) =>
             ctx.Extension<ModularAvatarContext>().BuildContext;
-
+        
+#if MA_VRCSDK3_AVATARS
         /// <summary>
         /// This dictionary overrides the _original contents_ of ModularAvatarMenuInstallers. Notably, this does not
         /// replace the source menu for the purposes of identifying any other MAMIs that might install to the same
@@ -39,16 +46,19 @@ namespace nadena.dev.modular_avatar.core.editor
         /// </summary>
         internal readonly Dictionary<ModularAvatarMenuInstaller, Action<VRCExpressionsMenu.Control>> PostProcessControls
             = new Dictionary<ModularAvatarMenuInstaller, Action<VRCExpressionsMenu.Control>>();
+#endif
 
         public BuildContext(nadena.dev.ndmf.BuildContext PluginBuildContext)
         {
             this.PluginBuildContext = PluginBuildContext;
         }
 
+#if MA_VRCSDK3_AVATARS
         public BuildContext(VRCAvatarDescriptor avatarDescriptor)
             : this(new ndmf.BuildContext(avatarDescriptor, null))
         {
         }
+#endif
 
         public void SaveAsset(Object obj)
         {
@@ -101,6 +111,7 @@ namespace nadena.dev.modular_avatar.core.editor
             return merger.Finish();
         }
 
+#if MA_VRCSDK3_AVATARS
         public VRCExpressionsMenu CloneMenu(VRCExpressionsMenu menu)
         {
             if (menu == null) return null;
@@ -119,5 +130,6 @@ namespace nadena.dev.modular_avatar.core.editor
 
             return newMenu;
         }
+#endif
     }
 }

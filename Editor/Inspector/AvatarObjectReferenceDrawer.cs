@@ -134,7 +134,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 if (obj == null) return null;
 
                 var transform = obj.transform;
-                var avatar = RuntimeUtil.FindAvatarInParents(transform).transform;
+                var avatar = RuntimeUtil.FindAvatarTransformInParents(transform);
 
                 if (i == 0)
                 {

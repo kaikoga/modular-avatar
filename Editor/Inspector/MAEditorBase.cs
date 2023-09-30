@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
@@ -79,5 +80,13 @@ namespace nadena.dev.modular_avatar.core.editor
 
     internal class MAVisualElement : VisualElement
     {
+    }
+
+    internal abstract class MAUnsupportedEditorBase : MAEditorBase
+    {
+        protected override void OnInnerInspectorGUI()
+        {
+            EditorGUILayout.HelpBox(Localization.S("unsupported"), MessageType.Error);
+        }
     }
 }

@@ -1,8 +1,9 @@
-#if MA_VRCSDK3_AVATARS
-
 using nadena.dev.modular_avatar.core.menu;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.ScriptableObjects;
+#endif
 
 namespace nadena.dev.modular_avatar.core
 {
@@ -15,7 +16,9 @@ namespace nadena.dev.modular_avatar.core
     [AddComponentMenu("Modular Avatar/MA Menu Item")]
     public class ModularAvatarMenuItem : AvatarTagComponent, MenuSource
     {
+#if MA_VRCSDK3_AVATARS
         public VRCExpressionsMenu.Control Control;
+#endif
         public SubmenuSource MenuSource;
 
         public GameObject menuSource_otherObjectChildren;
@@ -26,6 +29,8 @@ namespace nadena.dev.modular_avatar.core
         public bool isSynced = true;
 
         public bool isSaved = true;
+
+#if MA_VRCSDK3_AVATARS
 
         protected override void OnValidate()
         {
@@ -43,9 +48,11 @@ namespace nadena.dev.modular_avatar.core
         {
             // no-op
         }
+#endif
 
         public void Visit(NodeContext context)
         {
+#if MA_VRCSDK3_AVATARS
             if (Control == null)
             {
                 Control = new VRCExpressionsMenu.Control();
@@ -75,8 +82,8 @@ namespace nadena.dev.modular_avatar.core
             }
 
             context.PushControl(cloned);
+#endif
         }
     }
 }
 
-#endif

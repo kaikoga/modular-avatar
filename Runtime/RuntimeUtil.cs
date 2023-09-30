@@ -26,10 +26,15 @@ using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
+#endif
+
 #if UNITY_EDITOR
 using System.Reflection;
 #endif
+
 
 namespace nadena.dev.modular_avatar.core
 {
@@ -87,6 +92,9 @@ namespace nadena.dev.modular_avatar.core
             return RelativePath(avatar.gameObject, child);
         }
 
+        public static bool IsAvatarRoot(Transform target) => ndmf.runtime.RuntimeUtil.IsAvatarRoot(target);
+
+#if MA_VRCSDK3_AVATARS
         public static VRCAvatarDescriptor FindAvatarInParents(Transform target)
         {
             while (target != null)
@@ -98,6 +106,9 @@ namespace nadena.dev.modular_avatar.core
 
             return null;
         }
+#endif
+
+        public static Transform FindAvatarTransformInParents(Transform target) => ndmf.runtime.RuntimeUtil.FindAvatarInParents(target);
 
         public static void MarkDirty(UnityEngine.Object obj)
         {

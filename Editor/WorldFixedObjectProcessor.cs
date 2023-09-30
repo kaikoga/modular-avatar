@@ -3,17 +3,16 @@ using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
-using VRC.SDK3.Avatars.Components;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
     internal class WorldFixedObjectProcessor
     {
         private BuildContext _context;
-        private VRCAvatarDescriptor _avatar;
+        private ndmf.BuildContext _avatar;
         private Transform _proxy;
 
-        public WorldFixedObjectProcessor(VRCAvatarDescriptor avatar)
+        public WorldFixedObjectProcessor(ndmf.BuildContext avatar)
         {
             _avatar = avatar;
         }
@@ -21,7 +20,7 @@ namespace nadena.dev.modular_avatar.core.editor
         public void Process(BuildContext context)
         {
             _context = context;
-            foreach (var target in _avatar.GetComponentsInChildren<ModularAvatarWorldFixedObject>(true)
+            foreach (var target in _avatar.AvatarRootObject.GetComponentsInChildren<ModularAvatarWorldFixedObject>(true)
                          .OrderByDescending(x => NestCount(x.transform)))
                 BuildReport.ReportingObject(target, () => Process(target));
         }
@@ -66,7 +65,7 @@ namespace nadena.dev.modular_avatar.core.editor
             var fixedGameObject = AssetDatabase.LoadAssetAtPath<GameObject>(
                 AssetDatabase.GUIDToAssetPath("78828bfbcb4cb4ce3b00de044eb2d927"));
 
-            var avatarRoot = _avatar.transform;
+            var avatarRoot = _avatar.AvatarRootTransform;
             GameObject obj = new GameObject("(MA WorldFixedRoot)");
 
             obj.transform.SetParent(avatarRoot, false);

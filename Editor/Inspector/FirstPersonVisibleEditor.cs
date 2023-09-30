@@ -10,7 +10,7 @@ namespace nadena.dev.modular_avatar.core.editor
         private void OnEnable()
         {
             var target = (ModularAvatarVisibleHeadAccessory) this.target;
-            var avatar = RuntimeUtil.FindAvatarInParents(target.transform);
+            var avatar = RuntimeUtil.FindAvatarInParents(target.transform).transform;
 
             if (avatar != null) _processor = new VisibleHeadAccessoryProcessor(avatar);
         }

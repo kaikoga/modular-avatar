@@ -10,7 +10,10 @@ namespace nadena.dev.modular_avatar.core
 
         public override void Visit(NodeContext context)
         {
+#if MA_VRCSDK3_AVATARS
+
             context.PushNode(new MenuNodesUnder(targetObject != null ? targetObject : gameObject));
+#endif
         }
 
         public override void ResolveReferences()
@@ -19,3 +22,4 @@ namespace nadena.dev.modular_avatar.core
         }
     }
 }
+

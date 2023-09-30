@@ -50,8 +50,10 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
                 seq.Run(PhysbonesBlockerPluginPass.Instance);
                 seq.Run("Fixup Expressions Menu", ctx =>
                 {
+#if MA_VRCSDK3_AVATARS
                     var maContext = ctx.Extension<ModularAvatarContext>().BuildContext;
                     FixupExpressionsMenuPass.FixupExpressionsMenu(maContext);
+#endif
                 });
                 seq.Run("Rebind humanoid avatar", ctx =>
                 {

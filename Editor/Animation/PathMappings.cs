@@ -7,6 +7,11 @@ using nadena.dev.ndmf;
 using nadena.dev.ndmf.util;
 using UnityEditor;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
+using VRC.SDK3.Avatars.Components;
+#endif
+
 using Object = UnityEngine.Object;
 
 #endregion
@@ -213,7 +218,9 @@ namespace nadena.dev.modular_avatar.animation
             if (originalClip == null) return null;
             if (clipCache != null && clipCache.TryGetValue(originalClip, out var cachedClip)) return cachedClip;
 
+#if MA_VRCSDK3_AVATARS
             if (originalClip.IsProxyAnimation()) return originalClip;
+#endif
 
             var curveBindings = AnimationUtility.GetCurveBindings(originalClip);
             var objectBindings = AnimationUtility.GetObjectReferenceCurveBindings(originalClip);

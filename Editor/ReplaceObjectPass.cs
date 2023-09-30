@@ -29,7 +29,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
         public void Process()
         {
-            var avatarDescriptor = _buildContext.AvatarDescriptor;
+            var avatarDescriptor = _buildContext.AvatarRootTransform;
             var replacementComponents =
                 avatarDescriptor.GetComponentsInChildren<ModularAvatarReplaceObject>(true);
 
@@ -43,7 +43,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             foreach (var component in replacementComponents)
             {
-                var targetObject = component.targetObject?.Get(_buildContext.AvatarDescriptor);
+                var targetObject = component.targetObject?.Get(_buildContext.AvatarRootTransform);
 
                 if (targetObject == null)
                 {
@@ -154,7 +154,7 @@ namespace nadena.dev.modular_avatar.core.editor
         {
             Dictionary<UnityObject, List<Reference>> refIndex = new Dictionary<UnityObject, List<Reference>>();
 
-            IndexObject(_buildContext.AvatarDescriptor.gameObject);
+            IndexObject(_buildContext.AvatarRootObject);
 
             return refIndex;
 

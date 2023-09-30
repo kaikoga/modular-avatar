@@ -112,9 +112,9 @@ namespace nadena.dev.modular_avatar.animation
         {
             _context = context;
 
+#if MA_VRCSDK3_AVATARS
             AnimationUtil.CloneAllControllers(context);
 
-#if MA_VRCSDK3_AVATARS
             var avatarDescriptor = context.AvatarDescriptor;
 
             foreach (var layer in avatarDescriptor.baseAnimationLayers)

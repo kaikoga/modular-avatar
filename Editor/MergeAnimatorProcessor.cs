@@ -1,4 +1,6 @@
-﻿/*
+﻿#if MA_VRCSDK3_AVATARS
+
+/*
  * MIT License
  *
  * Copyright (c) 2022 bd_
@@ -248,3 +250,5 @@ namespace nadena.dev.modular_avatar.core.editor
         }
     }
 }
+
+#endif

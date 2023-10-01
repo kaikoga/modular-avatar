@@ -13,7 +13,11 @@ namespace nadena.dev.modular_avatar.core
         Children,
     }
 
+#if MA_VRCSDK3_AVATARS
     [AddComponentMenu("Modular Avatar/MA Menu Item")]
+#else
+    [AddComponentMenu("Modular Avatar/Unsupported/MA Menu Item (Unsupported)")]
+#endif
     public class ModularAvatarMenuItem : AvatarTagComponent, MenuSource
     {
 #if MA_VRCSDK3_AVATARS

@@ -13,7 +13,11 @@ namespace nadena.dev.modular_avatar.core
     ///
     /// We can also end up with a loop between install targets; in this case, we break the loop at an arbitrary point.
     /// </summary>
+#if MA_VRCSDK3_AVATARS
     [AddComponentMenu("Modular Avatar/MA Menu Install Target")]
+#else
+    [AddComponentMenu("Modular Avatar/Unsupported/MA Menu Install Target (Unsupported)")]
+#endif
     internal class ModularAvatarMenuInstallTarget : MenuSourceComponent
     {
         public ModularAvatarMenuInstaller installer;

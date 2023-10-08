@@ -2,8 +2,11 @@
 using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEngine;
 using UnityEngine.Animations;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.PhysBone.Components;
+#endif
 
 namespace nadena.dev.modular_avatar.core.editor
 {
@@ -19,20 +22,21 @@ namespace nadena.dev.modular_avatar.core.editor
             InPhysBoneChain
         }
 
-        private VRCAvatarDescriptor _avatar;
+        private Transform _avatar;
         private HashSet<Transform> _activeBones = new HashSet<Transform>();
         private Transform _headBone;
 
         private HashSet<Transform> _visibleBones = new HashSet<Transform>();
         private Transform _proxyHead;
 
-        public VisibleHeadAccessoryProcessor(VRCAvatarDescriptor avatar)
+        public VisibleHeadAccessoryProcessor(Transform avatar)
         {
             _avatar = avatar;
 
             var animator = avatar.GetComponent<Animator>();
             _headBone = animator != null ? animator.GetBoneTransform(HumanBodyBones.Head) : null;
 
+#if MA_VRCSDK3_AVATARS
             foreach (var physBone in avatar.GetComponentsInChildren<VRCPhysBone>(true))
             {
                 var boneRoot = physBone.rootTransform != null ? physBone.rootTransform : physBone.transform;
@@ -43,6 +47,7 @@ namespace nadena.dev.modular_avatar.core.editor
                     Traverse(child, ignored);
                 }
             }
+#endif
 
             void Traverse(Transform bone, HashSet<Transform> ignored)
             {
@@ -60,6 +65,7 @@ namespace nadena.dev.modular_avatar.core.editor
         {
             bool didWork = false;
 
+#if MA_VRCSDK3_AVATARS
             foreach (var target in _avatar.GetComponentsInChildren<ModularAvatarVisibleHeadAccessory>(true))
             {
                 var w = BuildReport.ReportingObject(target, () => Process(target));
@@ -75,6 +81,7 @@ namespace nadena.dev.modular_avatar.core.editor
                         () => new VisibleHeadAccessoryMeshProcessor(smr, _visibleBones, _proxyHead).Retarget(context));
                 }
             }
+#endif
         }
 
         bool Process(ModularAvatarVisibleHeadAccessory target)

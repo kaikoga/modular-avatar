@@ -27,7 +27,11 @@ using UnityEngine;
 namespace nadena.dev.modular_avatar.core
 {
     [DisallowMultipleComponent]
+#if MA_VRCSDK3_AVATARS
     [AddComponentMenu("Modular Avatar/MA PhysBone Blocker")]
+#else
+    [AddComponentMenu("Modular Avatar/Unsupported/MA PhysBone Blocker (Unsupported)")]
+#endif
     public class ModularAvatarPBBlocker : AvatarTagComponent
     {
         public override void ResolveReferences()

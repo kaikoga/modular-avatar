@@ -29,12 +29,15 @@ using JetBrains.Annotations;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
+#if MA_VRCSDK3_AVATARS
 using VRC.SDKBase.Editor.BuildPipeline;
+#endif
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
+
+#if MA_VRCSDK3_AVATARS
     internal class CleanupTempAssets : IVRCSDKPostprocessAvatarCallback
     {
         public int callbackOrder => 99999;
@@ -44,6 +47,7 @@ namespace nadena.dev.modular_avatar.core.editor
             Util.DeleteTemporaryAssets();
         }
     }
+#endif
 
     [InitializeOnLoad]
     internal static class Util
@@ -238,7 +242,7 @@ namespace nadena.dev.modular_avatar.core.editor
             {
                 var component = ptr.GetComponent<T>();
                 if (component != null) yield return component;
-                if (ptr.GetComponent<VRCAvatarDescriptor>() != null) break;
+                if (RuntimeUtil.IsAvatarRoot(ptr)) break;
                 ptr = ptr.parent;
             }
         }

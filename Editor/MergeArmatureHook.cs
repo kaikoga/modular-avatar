@@ -30,8 +30,12 @@ using nadena.dev.modular_avatar.editor.ErrorReporting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Animations;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.PhysBone.Components;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -58,6 +62,7 @@ namespace nadena.dev.modular_avatar.core.editor
 
             TopoProcessMergeArmatures(mergeArmatures);
 
+#if MA_VRCSDK3_AVATARS
             foreach (var c in avatarGameObject.transform.GetComponentsInChildren<VRCPhysBone>(true))
             {
                 if (c.rootTransform == null) c.rootTransform = c.transform;
@@ -75,6 +80,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 if (c.rootTransform == null) c.rootTransform = c.transform;
                 RetainBoneReferences(c);
             }
+#endif
 
             foreach (var c in avatarGameObject.transform.GetComponentsInChildren<IConstraint>(true))
             {
@@ -366,6 +372,7 @@ namespace nadena.dev.modular_avatar.core.editor
          */
         private void PruneDuplicatePhysBones()
         {
+#if MA_VRCSDK3_AVATARS
             foreach (var obj in mergedObjects)
             {
                 if (obj.GetComponent<VRCPhysBone>() == null) continue;
@@ -394,6 +401,7 @@ namespace nadena.dev.modular_avatar.core.editor
                     }
                 }
             }
+#endif
         }
     }
 }

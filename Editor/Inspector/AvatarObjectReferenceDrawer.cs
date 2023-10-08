@@ -1,6 +1,5 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
 
 namespace nadena.dev.modular_avatar.core.editor
 {
@@ -122,12 +121,12 @@ namespace nadena.dev.modular_avatar.core.editor
             }
         }
 
-        private static VRCAvatarDescriptor findContainingAvatar(SerializedProperty property)
+        private static Transform findContainingAvatar(SerializedProperty property)
         {
             // Find containing object, and from that the avatar
             if (property.serializedObject == null) return null;
 
-            VRCAvatarDescriptor commonAvatar = null;
+            Transform commonAvatar = null;
             var targets = property.serializedObject.targetObjects;
             for (int i = 0; i < targets.Length; i++)
             {
@@ -135,7 +134,7 @@ namespace nadena.dev.modular_avatar.core.editor
                 if (obj == null) return null;
 
                 var transform = obj.transform;
-                var avatar = RuntimeUtil.FindAvatarInParents(transform);
+                var avatar = RuntimeUtil.FindAvatarTransformInParents(transform);
 
                 if (i == 0)
                 {

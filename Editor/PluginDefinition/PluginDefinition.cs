@@ -26,7 +26,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
             Sequence seq = InPhase(BuildPhase.Resolving);
             seq.Run(ResolveObjectReferences.Instance);
             // Protect against accidental destructive edits by cloning the input controllers ASAP
+#if MA_VRCSDK3_AVATARS
             seq.Run("Clone animators", AnimationUtil.CloneAllControllers);
+#endif
 
             seq = InPhase(BuildPhase.Transforming);
             seq.WithRequiredExtension(typeof(ModularAvatarContext), _s1 =>
@@ -42,7 +44,7 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
                     seq.Run(BoneProxyPluginPass.Instance);
                     seq.Run(VisibleHeadAccessoryPluginPass.Instance);
                     seq.Run("World Fixed Object",
-                        ctx => new WorldFixedObjectProcessor(ctx.AvatarDescriptor).Process(ctx)
+                        ctx => new WorldFixedObjectProcessor(ctx).Process(ctx)
                     );
                     seq.Run(ReplaceObjectPluginPass.Instance);
                     seq.Run(BlendshapeSyncAnimationPluginPass.Instance);
@@ -50,8 +52,10 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
                 seq.Run(PhysbonesBlockerPluginPass.Instance);
                 seq.Run("Fixup Expressions Menu", ctx =>
                 {
+#if MA_VRCSDK3_AVATARS
                     var maContext = ctx.Extension<ModularAvatarContext>().BuildContext;
                     FixupExpressionsMenuPass.FixupExpressionsMenu(maContext);
+#endif
                 });
                 seq.Run("Rebind humanoid avatar", ctx =>
                 {
@@ -146,7 +150,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
+#if MA_VRCSDK3_AVATARS
             new RenameParametersHook().OnPreprocessAvatar(context.AvatarRootObject, MAContext(context));
+#endif
         }
     }
 
@@ -154,7 +160,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
+#if MA_VRCSDK3_AVATARS
             new MergeAnimatorProcessor().OnPreprocessAvatar(context.AvatarRootObject, MAContext(context));
+#endif
         }
     }
 
@@ -162,7 +170,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
+#if MA_VRCSDK3_AVATARS
             new MenuInstallHook().OnPreprocessAvatar(context.AvatarRootObject, MAContext(context));
+#endif
         }
     }
 
@@ -186,7 +196,7 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
-            new VisibleHeadAccessoryProcessor(context.AvatarDescriptor).Process(MAContext(context));
+            new VisibleHeadAccessoryProcessor(context.AvatarRootTransform).Process(MAContext(context));
         }
     }
 
@@ -202,7 +212,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
+#if MA_VRCSDK3_AVATARS
             new BlendshapeSyncAnimationProcessor().OnPreprocessAvatar(context.AvatarRootObject, MAContext(context));
+#endif
         }
     }
 
@@ -210,7 +222,9 @@ namespace nadena.dev.modular_avatar.core.editor.plugin
     {
         protected override void Execute(ndmf.BuildContext context)
         {
+#if MA_VRCSDK3_AVATARS
             PhysboneBlockerPass.Process(context.AvatarRootObject);
+#endif
         }
     }
 

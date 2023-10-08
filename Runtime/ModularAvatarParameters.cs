@@ -29,7 +29,11 @@ namespace nadena.dev.modular_avatar.core
     }
 
     [DisallowMultipleComponent]
+#if MA_VRCSDK3_AVATARS
     [AddComponentMenu("Modular Avatar/MA Parameters")]
+#else
+    [AddComponentMenu("Modular Avatar/Unsupported/MA Parameters (Unsupported)")]
+#endif
     public class ModularAvatarParameters : AvatarTagComponent
     {
         public List<ParameterConfig> parameters = new List<ParameterConfig>();

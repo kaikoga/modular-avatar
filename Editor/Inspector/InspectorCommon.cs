@@ -1,5 +1,11 @@
 ﻿using UnityEditor;
+
+#if UNITY_2021_2_OR_NEWER
+using UnityEditor.SceneManagement;
+#else
 using UnityEditor.Experimental.SceneManagement;
+#endif
+
 using UnityEngine;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -14,7 +20,7 @@ namespace nadena.dev.modular_avatar.core.editor
             var target = targets[0] as Component;
             if (target == null) return;
 
-            if (RuntimeUtil.FindAvatarInParents(target.transform) == null)
+            if (RuntimeUtil.FindAvatarTransformInParents(target.transform) == null)
             {
                 EditorGUILayout.HelpBox(Localization.S("hint.not_in_avatar"), MessageType.Warning);
             }

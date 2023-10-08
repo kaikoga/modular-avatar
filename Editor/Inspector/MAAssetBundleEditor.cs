@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.ScriptableObjects;
+#endif
+
 using Object = UnityEngine.Object;
 
 namespace nadena.dev.modular_avatar.core.editor
@@ -31,8 +35,10 @@ namespace nadena.dev.modular_avatar.core.editor
             typeof(Mesh),
             typeof(AnimationClip),
             typeof(RuntimeAnimatorController),
+#if MA_VRCSDK3_AVATARS
             typeof(VRCExpressionParameters),
             typeof(VRCExpressionsMenu),
+#endif
         };
 
         private Dictionary<UnityEngine.Object, AssetInfo> _assets;
@@ -60,12 +66,16 @@ namespace nadena.dev.modular_avatar.core.editor
 
             public void PopulateReferences(Dictionary<UnityEngine.Object, AssetInfo> assets)
             {
-                if (Asset is Mesh || Asset is AnimationClip || Asset is VRCExpressionsMenu ||
-                    Asset is VRCExpressionsMenu)
+                if (Asset is Mesh || Asset is AnimationClip)
                 {
                     return; // No child objects
                 }
-
+#if MA_VRCSDK3_AVATARS
+                if (Asset is VRCExpressionsMenu || Asset is VRCExpressionsMenu)
+                {
+                    return; // No child objects
+                }
+#endif
                 var so = new SerializedObject(Asset);
                 var prop = so.GetIterator();
 

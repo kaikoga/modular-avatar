@@ -6,7 +6,10 @@ using nadena.dev.ndmf;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+
+#if MA_VRCSDK3_AVATARS
 using VRC.SDK3.Avatars.Components;
+#endif
 
 #endregion
 
@@ -14,13 +17,14 @@ namespace nadena.dev.modular_avatar.animation
 {
     internal static class AnimationUtil
     {
+#if MA_VRCSDK3_AVATARS
         private const string SAMPLE_PATH_PACKAGE =
             "Packages/com.vrchat.avatars/Samples/AV3 Demo Assets/Animation/Controllers";
 
         private const string SAMPLE_PATH_LEGACY = "Assets/VRCSDK/Examples3/Animation/Controllers";
 
         private const string GUID_GESTURE_HANDSONLY_MASK = "b2b8bad9583e56a46a3e21795e96ad92";
-
+#endif
 
         public static AnimatorController DeepCloneAnimator(BuildContext context, RuntimeAnimatorController controller)
         {
@@ -42,6 +46,7 @@ namespace nadena.dev.modular_avatar.animation
             return merger.Finish();
         }
 
+#if MA_VRCSDK3_AVATARS
         internal static void CloneAllControllers(BuildContext context)
         {
             // Ensure all of the controllers on the avatar descriptor point to temporary assets.
@@ -214,5 +219,7 @@ namespace nadena.dev.modular_avatar.animation
                 }
             }
         }
+#endif
     }
 }
+
